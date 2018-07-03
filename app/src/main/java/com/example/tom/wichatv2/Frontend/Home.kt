@@ -11,8 +11,8 @@ import com.example.tom.wichatv2.Backend.Domain.Impl.ChatroomImpl
 import com.example.tom.wichatv2.Backend.Domain.Impl.MessageImplFactory
 import com.example.tom.wichatv2.Backend.Domain.Impl.UserImplFactory
 import com.example.tom.wichatv2.Backend.Protocol.IRC.Impl.IRCClientImpl
-import com.example.tom.wichatv2.Frontend.ViewModel.ChatFragment
-import com.example.tom.wichatv2.Frontend.ViewModel.UserFragment
+import com.example.tom.wichatv2.Frontend.ViewModel.Message.MessageFragment
+import com.example.tom.wichatv2.Frontend.ViewModel.User.UserFragment
 import com.example.tom.wichatv2.Frontend.ViewModel.UsernameManager
 import com.example.tom.wichatv2.R
 import kotlinx.android.synthetic.main.activity_home.*
@@ -70,7 +70,7 @@ class Home : AppCompatActivity() {
         override fun getItem(position: Int): Fragment {
             return when (position) {
                 0 -> {
-                    ChatFragment.newInstance(chatroom)
+                    MessageFragment.newInstance(chatroom)
                 }
                 else -> {
                     UserFragment.newInstance(chatroom)

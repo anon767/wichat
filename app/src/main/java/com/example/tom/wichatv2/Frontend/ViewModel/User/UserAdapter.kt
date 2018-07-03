@@ -1,4 +1,4 @@
-package com.example.tom.wichatv2.Frontend.ViewModel
+package com.example.tom.wichatv2.Frontend.ViewModel.User
 
 import android.annotation.TargetApi
 import android.os.Build

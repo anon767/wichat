@@ -1,4 +1,4 @@
-package com.example.tom.wichatv2.Frontend.ViewModel
+package com.example.tom.wichatv2.Frontend.ViewModel.User
 
 import android.os.Bundle
 import android.support.v4.app.Fragment

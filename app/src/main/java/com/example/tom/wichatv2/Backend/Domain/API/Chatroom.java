@@ -65,7 +65,6 @@ public abstract class Chatroom implements Serializable {
         return userMap;
     }
 
-
     public Map<Integer, Message> getMessageMap() {
         return messageMap;
     }

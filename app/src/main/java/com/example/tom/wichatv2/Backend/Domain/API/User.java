@@ -4,8 +4,8 @@ import java.io.Serializable;
 
 public abstract class User implements Serializable {
     protected String _lowerNick;
-    protected String _nick;
-    protected String _prefix;
+    private String _nick;
+    private String _prefix;
 
     public User(String prefix, String nick) {
         this._prefix = prefix;
