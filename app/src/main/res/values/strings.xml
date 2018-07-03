@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">wichatv2</string>
+    <string name="enter_message">Enter message</string>
+    <string name="send">SEND</string>
+    <string name="errorMessage">Fehlerhafte Nachricht</string>
+    <string name="wichatacc">WiChatSys</string>
+    <string name="title_activity_home">Home</string>
+    <string name="action_settings">Settings</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+    <string name="ircserver">irc.thecout.com</string>
+    <string name="test">test</string>
+    <string name="bitte_gib_einen_benutzernamen_ein">Bitte Gib einen Benutzernamen ein</string>
+    <string name="name">Name</string>
+    <string name="speichern">Speichern</string>
+    <string name="you">Du</string>
+</resources>
