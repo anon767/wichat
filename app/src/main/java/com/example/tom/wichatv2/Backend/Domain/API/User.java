@@ -2,10 +2,10 @@ package com.example.tom.wichatv2.Backend.Domain.API;
 
 import java.io.Serializable;
 
-public abstract class User implements Serializable{
-    private String _lowerNick;
-    private String _nick;
-    private String _prefix;
+public abstract class User implements Serializable {
+    protected String _lowerNick;
+    protected String _nick;
+    protected String _prefix;
 
     public User(String prefix, String nick) {
         this._prefix = prefix;
@@ -38,7 +38,7 @@ public abstract class User implements Serializable{
     }
 
     public boolean equals(Object o) {
-        return o instanceof User && ((User) o)._lowerNick.equals(this._lowerNick);
+        return o instanceof User && ((User) o).getNick().toLowerCase().equals(this._lowerNick);
     }
 
     public int hashCode() {

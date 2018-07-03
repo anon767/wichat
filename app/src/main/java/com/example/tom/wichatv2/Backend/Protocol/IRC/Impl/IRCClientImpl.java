@@ -2,6 +2,7 @@ package com.example.tom.wichatv2.Backend.Protocol.IRC.Impl;
 
 import com.example.tom.wichatv2.Backend.Domain.API.Chatroom;
 import com.example.tom.wichatv2.Backend.Domain.API.Message;
+import com.example.tom.wichatv2.Backend.Domain.API.MessageFactory;
 import com.example.tom.wichatv2.Backend.Domain.API.User;
 import com.example.tom.wichatv2.Backend.Domain.API.UserFactory;
 import com.example.tom.wichatv2.Backend.Domain.Impl.MessageImpl;
@@ -9,25 +10,31 @@ import com.example.tom.wichatv2.Backend.Domain.Impl.UserImpl;
 import com.example.tom.wichatv2.Backend.Protocol.API.Client;
 import com.example.tom.wichatv2.Backend.Protocol.IRC.API.IRCClient;
 import com.example.tom.wichatv2.Backend.Protocol.IRC.API.IRCException;
+import com.example.tom.wichatv2.Backend.Protocol.IRC.API.NickAlreadyInUseException;
+import com.example.tom.wichatv2.Frontend.ViewModel.MessageType;
 import com.example.tom.wichatv2.R;
 
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.Locale;
 
 public class IRCClientImpl extends IRCClient implements Client {
 
-    /**
-     * @param userFactory
-     * @param chatroom
-     */
-    public IRCClientImpl(UserFactory userFactory, Chatroom chatroom) {
+    private MessageFactory messageFactory;
+
+    public IRCClientImpl(UserFactory userFactory, MessageFactory messageFactory, Chatroom chatroom) {
         super(userFactory, chatroom);
+        this.messageFactory = messageFactory;
     }
 
 
     public void connect(String host, int port, String username) throws IOException, IRCException {
-        super.connect(host, port, username);
+        try {
+            super.connect(host, port, username);
+        } catch (NickAlreadyInUseException e) {
+            super.connect(host, port, String.format("%s%d", username, (int) (Math.random() * 50 + 1)));
+        }
     }
 
 
@@ -50,7 +57,8 @@ public class IRCClientImpl extends IRCClient implements Client {
     @Override
     public void onMessage(Date evDate, String channel, String sender, String login, String hostname, String message) {
         super.onMessage(evDate, channel, sender, login, hostname, message);
-        chatroom.addMessage(new MessageImpl(message, chatroom.findUser(sender), new Date(), R.drawable.rounded_rectangle_green));
+        Message messageObject = messageFactory.create(message, chatroom.findUser(sender), new Date(), MessageType.FOREIGN.getRessource());
+        chatroom.addMessage(messageObject);
         chatroom.notifyMessage();
     }
 
@@ -92,7 +100,7 @@ public class IRCClientImpl extends IRCClient implements Client {
     public void onTopic(String channel, String topic, String setBy, long date, boolean changed) {
         super.onTopic(channel, topic, setBy, date, changed);
         chatroom.setTitle(topic);
-        chatroom.addMessage(new MessageImpl(String.format("%s hat den Channelnamen zu %s geändert", setBy, topic), chatroom.findUser(setBy), new Date(), R.drawable.rounded_rectangle_grey));
+        chatroom.addMessage(new MessageImpl(String.format("%s hat den Channelnamen zu %s geändert", setBy, topic), chatroom.findUser(setBy), new Date(), MessageType.SYSTEM.getRessource()));
         chatroom.notifyMessage();
     }
 

@@ -15,7 +15,7 @@ import android.util.Log;
  * and is thus used by the OutputThread to send lines to the server.
  *
  * @author Paul James Mutton,
- *         <a href="http://www.jibble.org/">http://www.jibble.org/</a>
+ * <a href="http://www.jibble.org/">http://www.jibble.org/</a>
  * @version 1.4.6 (Build time: Wed Apr 11 19:20:59 2007)
  */
 public class InputThread extends Thread {
@@ -74,13 +74,13 @@ public class InputThread extends Thread {
     public void run() {
         try {
             boolean running = true;
-            while ( running ) {
+            while (running) {
                 try {
-                    String line ;
-                    while ( (line = _breader.readLine()) != null ) {
+                    String line;
+                    while ((line = _breader.readLine()) != null) {
                         try {
                             _bot.handleLine(line);
-                        } catch ( Throwable t ) {
+                        } catch (Throwable t) {
                             // Stick the whole stack trace into a String so we can output it nicely.
                             StringWriter sw = new StringWriter();
                             PrintWriter pw = new PrintWriter(sw);
@@ -88,25 +88,25 @@ public class InputThread extends Thread {
                             pw.flush();
                         }
                     }
-                    if( line == null ) {
+                    if (line == null) {
                         // The server must have disconnected us.
                         running = false;
                     }
-                } catch ( InterruptedIOException iioe ) {
+                } catch (InterruptedIOException iioe) {
                     // This will happen if we haven't received anything from the server for a while.
                     // So we shall send it a ping to check that we are still connected.
                     this.sendRawLine("PING " + (System.currentTimeMillis() / 1000));
                     // Now we go back to listening for stuff from the server...
-                } catch ( SSLException ssle ) {
+                } catch (SSLException ssle) {
                     running = false;
                     try {
                         _socket.close();
                         _isConnected = false;
-                    } catch ( Exception ignored) {
+                    } catch (Exception ignored) {
                     }
                     _bot.onDisconnect();
                     return;
-                } catch ( IOException ee ) {
+                } catch (IOException ee) {
                     _socket.close();
                     _isConnected = false;
                     running = false;
@@ -114,7 +114,7 @@ public class InputThread extends Thread {
                     return;
                 }
             }
-        } catch ( Exception e ) {
+        } catch (Exception e) {
             Log.e("pIRCbot", "inputThread had a booboo", e);
             // Do nothing.
         }
@@ -122,11 +122,11 @@ public class InputThread extends Thread {
         // If we reach this point, then we must have disconnected.
         try {
             _socket.close();
-        } catch ( Exception e ) {
+        } catch (Exception e) {
             // Just assume the socket was already closed.
         }
 
-        if( !_disposed ) {
+        if (!_disposed) {
             _isConnected = false;
             _bot.onDisconnect();
         }
@@ -141,7 +141,7 @@ public class InputThread extends Thread {
         try {
             _disposed = true;
             _socket.close();
-        } catch ( Exception e ) {
+        } catch (Exception e) {
             // Do nothing.
         }
     }

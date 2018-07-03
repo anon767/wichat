@@ -17,7 +17,7 @@ class IRCUnitTest {
         MyAssertions.assertDoesNotThrow(fun() {
             val chatroom: Chatroom = ChatroomImpl("test", null)
             val ircclient = IRCClientImpl(UserImplFactory(), chatroom)
-            ircclient.connect("127.0.0.1", 6667)
+            ircclient.connect("127.0.0.1", 6667, "test")
             ircclient.join()
             ircclient.sendMessage(MessageImpl("yo", UserImpl("", "tom"), Date(), 0))
         })

@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity
 import com.example.tom.wichatv2.Backend.Domain.API.Chatroom
 import com.example.tom.wichatv2.Backend.Domain.API.Message
 import com.example.tom.wichatv2.Backend.Domain.Impl.ChatroomImpl
+import com.example.tom.wichatv2.Backend.Domain.Impl.MessageImplFactory
 import com.example.tom.wichatv2.Backend.Domain.Impl.UserImplFactory
 import com.example.tom.wichatv2.Backend.Protocol.IRC.Impl.IRCClientImpl
 import com.example.tom.wichatv2.Frontend.ViewModel.ChatFragment
@@ -18,7 +19,7 @@ import kotlinx.android.synthetic.main.activity_home.*
 
 class Home : AppCompatActivity() {
     var paused: Boolean = false
-    lateinit var client: IRCClientImpl
+    private lateinit var client: IRCClientImpl
     var chatroom: Chatroom = ChatroomImpl("lel", this)
     var usernameManager: UsernameManager = UsernameManager()
     private lateinit var clientThread: ClientThread
@@ -34,7 +35,7 @@ class Home : AppCompatActivity() {
 
     private fun startClientThread() {
         val username = usernameManager.getUsernameOtherwiseAsk(this)
-        client = IRCClientImpl(UserImplFactory(), chatroom)
+        client = IRCClientImpl(UserImplFactory(), MessageImplFactory(), chatroom)
         clientThread = ClientThread(client, getString(R.string.ircserver), 6697, username)
         clientThread.start()
     }

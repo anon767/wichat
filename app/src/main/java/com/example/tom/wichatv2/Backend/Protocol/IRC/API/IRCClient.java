@@ -120,7 +120,7 @@ public abstract class IRCClient implements ReplyConstants {
      *
      * @param hostname The hostname of the server to connect to.
      * @param port     The port number to connect to on the server.
-     * @throws IOException                                                         if it was not possible to connect to the server.
+     * @throws IOException                                                                 if it was not possible to connect to the server.
      * @throws com.example.tom.wichatv2.Backend.Protocol.IRC.API.IRCException              if the server would not let us join it.
      * @throws com.example.tom.wichatv2.Backend.Protocol.IRC.API.NickAlreadyInUseException if our nick is already in use on the server.
      */
@@ -137,7 +137,7 @@ public abstract class IRCClient implements ReplyConstants {
      * @param hostname The hostname of the server to connect to.
      * @param port     The port number to connect to on the server.
      * @param password The password to use to join the server.
-     * @throws IOException                                                         if it was not possible to connect to the server.
+     * @throws IOException                                                                 if it was not possible to connect to the server.
      * @throws com.example.tom.wichatv2.Backend.Protocol.IRC.API.IRCException              if the server would not let us join it.
      * @throws com.example.tom.wichatv2.Backend.Protocol.IRC.API.NickAlreadyInUseException if our nick is already in use on the server.
      */
@@ -268,7 +268,7 @@ public abstract class IRCClient implements ReplyConstants {
      * This method will throw an IRCException if we have never connected
      * to an IRC server previously.
      *
-     * @throws IOException                                                         if it was not possible to connect to the server.
+     * @throws IOException                                                                 if it was not possible to connect to the server.
      * @throws com.example.tom.wichatv2.Backend.Protocol.IRC.API.IRCException              if the server would not let us join it.
      * @throws com.example.tom.wichatv2.Backend.Protocol.IRC.API.NickAlreadyInUseException if our nick is already in use on the server.
      * @since PircBot 0.9.9
@@ -2266,6 +2266,7 @@ public abstract class IRCClient implements ReplyConstants {
      */
     protected final void setName(String name) {
         _name = name;
+        _nick = name;
     }
 
     public final void setAliases(Collection<String> aliases) {

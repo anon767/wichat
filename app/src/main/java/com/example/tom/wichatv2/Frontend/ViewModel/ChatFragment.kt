@@ -31,7 +31,7 @@ class ChatFragment : Fragment() {
         val chatroom = arguments!!.getSerializable("chatroom") as Chatroom
 
         viewManager = LinearLayoutManager(rootView.context)
-        viewAdapter = MessageAdapter(chatroom, MessageImpl(getString(R.string.errorMessage), UserImpl("", getString(R.string.wichatacc)), Date(), R.drawable.rounded_rectangle_grey))
+        viewAdapter = MessageAdapter(chatroom, MessageImpl(getString(R.string.errorMessage), UserImpl("", getString(R.string.wichatacc)), Date(), MessageType.SYSTEM.ressource))
         chatroom.setMessageAdapter(viewAdapter)
         recyclerView = rootView.findViewById<RecyclerView>(R.id.reyclerview_message_list).apply {
             setHasFixedSize(true)
@@ -44,7 +44,7 @@ class ChatFragment : Fragment() {
         button.setOnClickListener {
             val rawMessage = editText.text.toString()
             if (rawMessage.isNotEmpty()) {
-                val message = MessageImpl(rawMessage, UserImpl("", getString(R.string.you)), Date(), R.drawable.rounded_rectangle_orange)
+                val message = MessageImpl(rawMessage, UserImpl("", getString(R.string.you)), Date(), MessageType.YOU.ressource)
                 editText.setText("")
                 (activity as Home).onSendButtonClicked(message)
             }
