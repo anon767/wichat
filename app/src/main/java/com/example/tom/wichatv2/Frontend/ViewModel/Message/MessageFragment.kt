@@ -1,4 +1,4 @@
-package com.example.tom.wichatv2.Frontend.ViewModel
+package com.example.tom.wichatv2.Frontend.ViewModel.Message
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -13,10 +13,11 @@ import com.example.tom.wichatv2.Backend.Domain.API.Chatroom
 import com.example.tom.wichatv2.Backend.Domain.Impl.MessageImpl
 import com.example.tom.wichatv2.Backend.Domain.Impl.UserImpl
 import com.example.tom.wichatv2.Frontend.Home
+import com.example.tom.wichatv2.Frontend.ViewModel.MessageType
 import com.example.tom.wichatv2.R
 import java.util.*
 
-class ChatFragment : Fragment() {
+class MessageFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var viewAdapter: RecyclerView.Adapter<*>
     private lateinit var viewManager: LinearLayoutManager
@@ -53,8 +54,8 @@ class ChatFragment : Fragment() {
     }
 
     companion object {
-        fun newInstance(chatroom: Chatroom): ChatFragment {
-            val fragment = ChatFragment()
+        fun newInstance(chatroom: Chatroom): MessageFragment {
+            val fragment = MessageFragment()
             val bundle = Bundle()
             bundle.putSerializable("chatroom", chatroom)
             fragment.arguments = bundle
