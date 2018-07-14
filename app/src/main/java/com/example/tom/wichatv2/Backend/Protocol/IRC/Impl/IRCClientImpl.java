@@ -11,6 +11,9 @@ import com.example.tom.wichatv2.Backend.Protocol.API.Client;
 import com.example.tom.wichatv2.Backend.Protocol.IRC.API.IRCClient;
 import com.example.tom.wichatv2.Backend.Protocol.IRC.API.IRCException;
 import com.example.tom.wichatv2.Backend.Protocol.IRC.API.NickAlreadyInUseException;
+import com.example.tom.wichatv2.EventBus.EventBus;
+import com.example.tom.wichatv2.EventBus.EventType;
+import com.example.tom.wichatv2.EventBus.Handler;
 import com.example.tom.wichatv2.Frontend.ViewModel.MessageType;
 import com.example.tom.wichatv2.R;
 
@@ -26,6 +29,7 @@ public class IRCClientImpl extends IRCClient implements Client {
     public IRCClientImpl(UserFactory userFactory, MessageFactory messageFactory, Chatroom chatroom) {
         super(userFactory, chatroom);
         this.messageFactory = messageFactory;
+        EventBus.getInstance().addHandler(this);
     }
 
 
@@ -48,9 +52,8 @@ public class IRCClientImpl extends IRCClient implements Client {
 
     @Override
     public void onUserList(String channel, User[] users) {
-        Arrays.stream(users).forEach((user) -> {
-            chatroom.addUser(user);
-        });
+        Arrays.stream(users).forEach((user) -> chatroom.addUser(user));
+        EventBus.getInstance().emit(EventType.NOTIFYUSER, null);
     }
 
 
@@ -58,8 +61,7 @@ public class IRCClientImpl extends IRCClient implements Client {
     public void onMessage(Date evDate, String channel, String sender, String login, String hostname, String message) {
         super.onMessage(evDate, channel, sender, login, hostname, message);
         Message messageObject = messageFactory.create(message, chatroom.findUser(sender), new Date(), MessageType.FOREIGN.getRessource());
-        chatroom.addMessage(messageObject);
-        chatroom.notifyMessage();
+        EventBus.getInstance().emit(EventType.RECEIVEMESSAGE, messageObject);
     }
 
     @Override
@@ -70,20 +72,21 @@ public class IRCClientImpl extends IRCClient implements Client {
     @Override
     public void onJoin(String channel, String sender, String login, String hostname) {
         super.onJoin(channel, sender, login, hostname);
-        chatroom.addUser(new UserImpl("", sender));
-        chatroom.notifyUser();
+        EventBus.getInstance().emit(EventType.NEWUSER, userFactory.create("", sender));
+
     }
 
     @Override
     public void onPart(String channel, String sender, String login, String hostname) {
         super.onPart(channel, sender, login, hostname);
-        chatroom.removeUser(new UserImpl("", sender));
-        chatroom.notifyUser();
+        EventBus.getInstance().emit(EventType.GONEUSER, userFactory.create("", sender));
     }
 
     @Override
     public void onNickChange(String oldNick, String login, String hostname, String newNick) {
         super.onNickChange(oldNick, login, hostname, newNick);
+        EventBus.getInstance().emit(EventType.GONEUSER, userFactory.create("", oldNick));
+        EventBus.getInstance().emit(EventType.NEWUSER, userFactory.create("", newNick));
     }
 
     @Override
@@ -99,14 +102,15 @@ public class IRCClientImpl extends IRCClient implements Client {
     @Override
     public void onTopic(String channel, String topic, String setBy, long date, boolean changed) {
         super.onTopic(channel, topic, setBy, date, changed);
-        chatroom.setTitle(topic);
-        chatroom.addMessage(new MessageImpl(String.format("%s hat den Channelnamen zu %s geändert", setBy, topic), chatroom.findUser(setBy), new Date(), MessageType.SYSTEM.getRessource()));
-        chatroom.notifyMessage();
+        EventBus.getInstance().emit(EventType.RECEIVEMESSAGE, messageFactory.create(String.format("%s hat den Channelnamen zu %s geändert", setBy, topic), chatroom.findUser(setBy), new Date(), MessageType.SYSTEM.getRessource()));
+        EventBus.getInstance().emit(EventType.CHANNELNAME, topic);
     }
 
     @Override
     public void onChannelInfo(String channel, int userCount, String topic) {
         super.onChannelInfo(channel, userCount, topic);
+        EventBus.getInstance().emit(EventType.CHANNELNAME, topic);
+
     }
 
     @Override
@@ -117,8 +121,14 @@ public class IRCClientImpl extends IRCClient implements Client {
     @Override
     public void onConnect() {
         super.onConnect();
-
+        EventBus.getInstance().emit(EventType.CONNECTED, null);
     }
 
-
+    @Override
+    public void handle(EventType event, Object object) {
+        switch (event) {
+            case SENDMESSAGE:
+                this.sendMessage((Message) object);
+        }
+    }
 }

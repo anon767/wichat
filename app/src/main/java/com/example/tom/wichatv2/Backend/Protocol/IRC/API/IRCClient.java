@@ -87,7 +87,7 @@ public abstract class IRCClient implements ReplyConstants {
     private static final int VOICE_REMOVE = 4;
     private static final int HALFOP_ADD = 5;
     private static final int HALFOP_REMOVE = 6;
-    private UserFactory userFactory;
+    protected UserFactory userFactory;
     protected Chatroom chatroom;
 
     /**

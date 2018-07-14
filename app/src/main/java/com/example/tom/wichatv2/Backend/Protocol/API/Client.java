@@ -2,10 +2,11 @@ package com.example.tom.wichatv2.Backend.Protocol.API;
 
 import com.example.tom.wichatv2.Backend.Domain.API.Message;
 import com.example.tom.wichatv2.Backend.Domain.API.User;
+import com.example.tom.wichatv2.EventBus.Handler;
 
 import java.util.Date;
 
-public interface Client {
+public interface Client extends Handler {
     void connect(String host, int port, String username) throws Exception;
 
     boolean isConnected();

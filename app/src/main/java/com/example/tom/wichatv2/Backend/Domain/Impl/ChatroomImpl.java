@@ -1,7 +1,5 @@
 package com.example.tom.wichatv2.Backend.Domain.Impl;
 
-import android.app.Activity;
-
 import com.example.tom.wichatv2.Backend.Domain.API.Chatroom;
 import com.example.tom.wichatv2.Backend.Domain.API.User;
 
@@ -10,8 +8,8 @@ import java.util.concurrent.ConcurrentHashMap;
 public class ChatroomImpl extends Chatroom {
 
 
-    public ChatroomImpl(String name, Activity activity) {
-        super(name, activity);
+    public ChatroomImpl(String name) {
+        super(name);
         super.userMap = new ConcurrentHashMap<>();
         super.messageMap = new ConcurrentHashMap<>();
     }
@@ -20,7 +18,6 @@ public class ChatroomImpl extends Chatroom {
     public User findUser(String name) {
         User u = new UserImpl("", name);
         super.userMap.put(u, u);
-        super.notifyUser();
         return u;
     }
 
